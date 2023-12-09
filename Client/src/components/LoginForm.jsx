@@ -10,21 +10,24 @@ const LoginForm = () => {
     e.preventDefault();
 
     try {
-      // Faites la requête vers votre backend avec Axios
       const response = await axios.post('http://localhost:3001/api/login', {
         email,
         password,
       });
 
-      // Traitez la réponse du serveur
-        if (response) {
-            toast.success(response.data.message , {
+        if (response.data.messageS != null) {
+            toast.success(response.data.messageS , {
 
-                autoClose: 3000, // Durée en millisecondes (3 secondes dans cet exemple)
+                autoClose: 4000, 
+
+            });
+        }else{
+            toast.error(response.data.messageE , {
+
+                autoClose: 4000,
 
             });
         }      
-      // Ajoutez votre logique de redirection ou de gestion d'état ici
     } catch (error) {
       // Gérez les erreurs ici
       console.error('Erreur lors de la connexion', error);
@@ -100,8 +103,8 @@ const LoginForm = () => {
 
           <div className="w-1/2 md:block hidden ">
             <img
-              src="https://images.unsplash.com/photo-1614741118887-7a4ee193a5fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1887&q=80"
-              className="rounded-2xl"
+            src="https://img.freepik.com/free-photo/modern-business-center_1127-3157.jpg?size=626&ext=jpg&ga=GA1.1.92304765.1695715663&semt=ais"
+              className="rounded-2xl h-full"
               alt="page img"
             />
           </div>

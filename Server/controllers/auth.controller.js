@@ -16,23 +16,11 @@ const register = async (req, res) => {
     const existingUser = await userModel.findOne({ email: req.body.email });
     if (existingUser) {
       return res
-        .status(400)
         .json({
-          message:
+          messageE:
             "Cet e-mail est déjà utilisé. Veuillez choisir un autre e-mail.",
         });
     }
-
-    // const role = await roleModel.findOne({ role_name: req.body.role });
-    // if (role.role_name === "manager") {
-    //   return res
-    //     .status(400)
-    //     .json({
-    //       message: 'vous avez pas le drois de s"inscrire tel que manager ',
-    //     });
-    // } else if (!role) {
-    //   return res.status(400).json({ message: "Rôle invalide." });
-    // }
 
     // Hacher le mot de passe
     console.log("for password register", req.body.password.length);
@@ -61,7 +49,7 @@ const register = async (req, res) => {
     verififemail(email, subject, link);
 
     return res.status(201).json({
-      message: "activer votre compte virefier votre mail",
+      messageS: "activer votre compte virefier votre mail",
       user: newUser,
       token: accessToken,
     });
@@ -89,9 +77,9 @@ const login = async (req, res) => {
     console.log(verifyexistEmail);
     //  .select('-_id -password -isverified');
     if (!verifyexistEmail) {
-      return res.json({ message: "Utilisateur introuvable" });
+      return res.json({ messageE: "Utilisateur introuvable" });
     } else if (verifyexistEmail.isverified === false) {
-      return res.json({ message: "activer votre compte" });
+      return res.json({ messageE: "activer votre compte" });
     }
 
     const comparePassword = await bcrypt.compare(
@@ -109,7 +97,7 @@ const login = async (req, res) => {
       });
 
       return res.status(200).json({
-        message: "Vous avez crée un compte avec success",
+        messageS: "Vous avez crée un compte avec success",
         data: {
           first_name: verifyexistEmail.first_name,
           last_name: verifyexistEmail.last_name,
@@ -118,7 +106,7 @@ const login = async (req, res) => {
         token: accessToken,
       });
     } else {
-      return res.json({ message: "Mot de passe incorrect" });
+      return res.json({ messageE: "Mot de passe incorrect" });
     }
   } catch (error) {
     res.json({ message: error.message });
