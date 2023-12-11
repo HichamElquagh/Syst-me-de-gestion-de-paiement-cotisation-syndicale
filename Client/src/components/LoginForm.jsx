@@ -1,8 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
+import { useSelector, useDispatch } from 'react-redux';
+import { setCredentials } from '../slices/authSlice';
+import { useNavigate } from 'react-router-dom';
 
 const LoginForm = () => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,6 +26,12 @@ const LoginForm = () => {
                 autoClose: 4000, 
 
             });
+
+                dispatch(setCredentials(response.data.data))
+                navigate('/')
+
+
+
         }else{
             toast.error(response.data.messageE , {
 
