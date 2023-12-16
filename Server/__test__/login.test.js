@@ -1,7 +1,7 @@
 const { login } = require('../../backend/controllers/auth.controller');
-const userModel = require('../../models/users');
+const userModel = require('../models/users');
 const bcrypt = require('bcrypt');
-const generateAccessToken = require('../../services/jwtToken');
+const generateAccessToken = require('../services/jwtToken');
 
 jest.mock('../models/users');
 jest.mock('../services/jwtToken'); // Mock the jwtToken service

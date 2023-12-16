@@ -1,8 +1,6 @@
 const express = require('express');
 const usersRouter = require('./routes/api');
-const clientRouter = require('./routes/client.route');
-const livreurRouter =  require('./routes/livreur.route')
-const managerRouter = require('./routes/manager')
+const syndicRoute = require('./routes/syndic')
 const dotenv = require('dotenv').config();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -29,6 +27,7 @@ app.use(cors({
   origin:"http://localhost:5173"
 }))
 app.use('/api', usersRouter);
+app.use('/syndic',syndicRoute)
 // app.use('/api/user', clientRouter )
 // app.use('/api/user', livreurRouter )
 // app.use('/api/user', managerRouter )

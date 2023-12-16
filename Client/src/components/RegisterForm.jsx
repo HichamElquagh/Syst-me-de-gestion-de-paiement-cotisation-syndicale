@@ -2,15 +2,19 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import validator from 'validator';
+import { Link, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterForm = () => {
+  const navigate = useNavigate();
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
-
+ 
+  
   const validateForm = () => {
     const newErrors = {};
 
@@ -65,6 +69,7 @@ const RegisterForm = () => {
         toast.success(response.data.messageS, {
           autoClose: 4000,
         });
+        navigate('/login')
       } else {
         toast.error(response.data.messageE, {
           autoClose: 4000,
@@ -165,8 +170,19 @@ const RegisterForm = () => {
                 Register
               </button>
             </form>
+            <div className="mt-7 grid grid-cols-3 items-center text-gray-500">
+              <hr className="border-gray-500" />
+              <p className="text-center text-sm">OR</p>
+              <hr className="border-gray-500" />
+            </div>
+           
+          <div className="text-sm flex justify-between items-center mt-3">
+              <p>If you  have an account...</p>
+              <Link to="/login" className="py-2 px-5 ml-3 bg-white border rounded-xl hover:scale-110 duration-300 border-blue-400  ">
+                Login
+              </Link>
+            </div>
           </div>
-
           {/* Image */}
           <div className="w-1/2 md:block hidden">
             <img

@@ -27,12 +27,7 @@ const UserSchema = new Schema({
     //   message: 'Invalid email address',
     // },
   },
-  // role : {
-  //   type: Schema.Types.ObjectId,
-  //   ref: 'Role', // Référence au modèle de rôle
-  //   required: true,
 
-  // },
 
   password: {
     type: String,

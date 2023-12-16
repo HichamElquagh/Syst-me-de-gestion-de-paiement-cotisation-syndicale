@@ -4,6 +4,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { setCredentials } from '../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -22,7 +23,6 @@ const LoginForm = () => {
 
         if (response.data.messageS != null) {
             toast.success(response.data.messageS , {
-
                 autoClose: 4000, 
 
             });
@@ -106,9 +106,9 @@ const LoginForm = () => {
 
             <div className="text-sm flex justify-between items-center mt-3">
               <p>If you don't have an account...</p>
-              <button className="py-2 px-5 ml-3 bg-white border rounded-xl hover:scale-110 duration-300 border-blue-400  ">
+              <Link to="/register" className="py-2 px-5 ml-3 bg-white border rounded-xl hover:scale-110 duration-300 border-blue-400  ">
                 Register
-              </button>
+              </Link>
             </div>
           </div>
 

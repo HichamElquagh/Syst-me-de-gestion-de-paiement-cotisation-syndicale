@@ -1,8 +1,8 @@
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 const userModel = require("../models/users");
-const roleModel = require("../models/role.model");
-const Usermail = require("../models/useremail.model")
+// const roleModel = require("../models/role.model");
+const Usermail = require("../models/appartement.model")
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
