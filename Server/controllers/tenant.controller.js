@@ -84,15 +84,15 @@ const deleteTenant = async (req, res) => {
     const deletedTenant = await Tenant.findByIdAndDelete(tenantId);
 
     if (!deletedTenant) {
-      return res.json({ messageE: 'Locataire non trouvé' });
+      return res.json({ messageE: 'Teant not Found' });
     }
 
     return res.json({
-      messageS: "Locataire supprimé avec succès",
+      messageS: "Tenant Deleted succussfully",
     });
   } catch (error) {
-    console.error('Erreur lors de la suppression du locataire :', error);
-    return res.status(500).json({ error: 'Erreur interne du serveur' });
+    // console.error('Erreur lors de la suppression du locataire :', error.message);
+    return res.status(500).json({ error: error.message });
   }
 };
 

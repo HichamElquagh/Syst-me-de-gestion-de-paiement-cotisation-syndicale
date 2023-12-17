@@ -46,6 +46,7 @@ const RegisterForm = () => {
 
     return Object.keys(newErrors).length === 0;
   };
+  console.log(errors);
 
   const handleRegister = async (e) => {
     e.preventDefault();

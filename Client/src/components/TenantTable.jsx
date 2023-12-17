@@ -3,6 +3,7 @@ import axios from "axios";
 import { Button } from "@material-tailwind/react";
 import AddModalTenant from "./modals/AddModalTenant";
 import EditModalTenant from "./modals/EditModalTenant";
+import toast from "react-hot-toast";
 const TenantTable = () => {
   const [tenants, setTenants] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -12,7 +13,7 @@ const TenantTable = () => {
 
   useEffect(() => {
     fetchTenants();
-  }, [tenants]);
+  }, []);
 
   const fetchTenants = async () => {
     try {
@@ -25,6 +26,7 @@ const TenantTable = () => {
 
   const handleAddModalToggle = () => {
     setIsModalOpen((prev) => !prev);
+    fetchTenants()
     
   };
 
@@ -36,21 +38,21 @@ const TenantTable = () => {
   };
 
   const handleRemoveModalOpen = async (tenantId) => {
-    // Implement your logic to open the remove modal
-    const response = await axios.delete(`http://localhost:3001/syndic/deleteTenant/${id}`);
+    console.log(tenantId);
+    const response = await axios.delete(`http://localhost:3001/syndic/deleteTenant/${tenantId}`);
 
     if (response) {
      toast.success(response.data.messageS, {
        autoClose: 4000,
      });
-     fetchApartments();
      
     }else{
      toast.success(response.data.messageE, {
        autoClose: 4000,
      });
+    } 
 
-    }  };
+   };
 
 
     const handleEditModalClose = () => {

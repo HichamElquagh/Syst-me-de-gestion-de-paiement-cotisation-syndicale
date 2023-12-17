@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import toast, { Toaster } from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCredentials } from '../slices/authSlice';
+import { setCredentials } from '../../slices/authSlice';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 

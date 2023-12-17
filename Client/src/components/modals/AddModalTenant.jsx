@@ -14,12 +14,35 @@ import {
 const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
 
 
+  const [errors, setErrors] = useState({});
 
   const [formData, setFormData] = useState({
     full_name: "",
     cin: "",
     phone: "",
   });
+
+  const validateForm = ()=>{
+    const newErrors= {};
+
+
+    if (!formData.full_name.trim()) {
+      newErrors.full_name = 'Full name is required ';
+    }
+
+    if (!formData.cin.trim()) {
+      newErrors.cin = 'Cin is required';
+    }
+
+    if (!formData.phone.trim()) {
+      newErrors.phone = 'Phone is required';
+    } 
+
+    setErrors(newErrors)
+
+    return Object.keys(newErrors).length === 0;
+
+  }
 
 
   const handleInputChange = (e) => {
@@ -28,10 +51,14 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
       ...prevData,
       [name]: value,
     }));
-    console.log(formData);
+
   };
 
   const handleAddTenant = async () => {
+
+      if (!validateForm()) {
+        return ;
+      }
     try {
       const response = await axios.post(
         'http://localhost:3001/syndic/addTenant',
@@ -79,9 +106,8 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
       size="xs"
       open={isOpenModal}
       handler={() => {
-        handleAddModalToggle();
-        // Appeler la fonction resetForm à la fermeture du modal
         resetForm();
+        handleAddModalToggle();
       }}
       className="bg-transparent shadow-none"
     >
@@ -99,7 +125,11 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
             onChange={handleInputChange}
             label="Full Name"
             size="lg"
+            error={errors.full_name} // Ajoutez cette ligne
           />
+            {errors.full_name && <p className="text-red-500 text-sm ">{errors.full_name}</p>}
+
+
           <Typography className="-mb-2" variant="h6">
             CIN 
           </Typography>
@@ -109,7 +139,11 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
             onChange={handleInputChange}
             label="CIN"
             size="lg"
+            error={errors.cin} // Ajoutez cette ligne
+
           />
+            {errors.cin && <p className="text-red-500 text-sm ">{errors.cin}</p>}
+
           <Typography className="-mb-2" variant="h6">
             Phone
           </Typography>
@@ -120,7 +154,11 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
             onChange={handleInputChange}
             label="Phone"
             size="lg"
+            error={errors.phone} // Ajoutez cette ligne
+
           />
+          {errors.phone && <p className="text-red-500 text-sm ">{errors.phone}</p>}
+
         </CardBody>
         <CardFooter className="pt-0">
           <Button
