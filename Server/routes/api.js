@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
-const { validateRegistrationData , validateloginData, authMiddleware,isAuth} = require('../middlewares/auth.middlewares');
-const verifToken = require('../services/verifToken')
+const { validateRegistrationData , validateloginData, authMiddleware} = require('../middlewares/auth.middlewares');
+// const verifToken = require('../services/verifToken')
 
 
 

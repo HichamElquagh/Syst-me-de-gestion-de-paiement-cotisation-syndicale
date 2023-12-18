@@ -17,12 +17,15 @@ const Appartement = new Schema({
   status: {
     type: String,
     enum: ['Occupied', 'Vacant'],
-    default: 'Vacant',
   },
   tenant: {
-    // type: mongoose.Schema.Types.ObjectId,
-    // ref: 'Tenant', // Assurez-vous que le modèle 'Locataire' existe
-    type : String
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Tenant', 
+
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User', 
 
   },
 

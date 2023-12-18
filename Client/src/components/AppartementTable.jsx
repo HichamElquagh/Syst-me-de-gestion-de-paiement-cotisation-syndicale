@@ -12,9 +12,12 @@
         Typography,
         Input,
         Checkbox,
+        Select,
+        Option,
       } from "@material-tailwind/react";
 
     const AppartementTable = () => {
+      const [tenants , setTenants] = useState([])
       const [isEditModalOpen, setEditModalOpen] = useState(false);
       const [editAppartmentId, setEditAppartmentId] = useState(null);
         const [isAddModalOpen, setAddModalOpen] = useState(false);
@@ -28,12 +31,15 @@
 
       useEffect(() => {
         fetchApartments()
+        fetchTenants()
           }, []); 
 
         const fetchApartments = async () => {
           try {
             const response = await axios.get(
-              "http://localhost:3001/syndic/appartements"
+              "http://localhost:3001/syndic/appartements",
+              { withCredentials: true }
+
             );
             if (response) {
               
@@ -41,6 +47,17 @@
             }
           } catch (error) {
             console.error("Error fetching apartments:", error);
+          }
+        };
+
+        const fetchTenants = async () => {
+          try {
+            const response = await axios.get('http://localhost:3001/syndic/getAllTenants', { withCredentials: true }
+            );
+            console.log(response);
+            setTenants(response.data);
+          } catch (error) {
+            console.error('Error fetching tenants:', error);
           }
         };
     
@@ -59,13 +76,21 @@
 
       };
 
-      const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prevData) => ({
-          ...prevData,
-          [name]: value,
-        }));
-      };
+        const handleInputChange = (e) => {
+          const { name, value } = e.target;
+          setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+          }));
+          console.log(formData);
+        };
+        const handleSelectChange = (name, value) => {
+          console.log(formData);
+          setFormData((prevData) => ({
+            ...prevData,
+            [name]: value,
+          }));
+        };
 
       const handleAddAppartement =  async () => {
         try {
@@ -76,7 +101,8 @@
                 status: formData.status,
                 tenant : formData.tenant  ,
             
-        });
+        },{ withCredentials: true }
+        );
         console.log(response);
 
         if (response) {
@@ -184,23 +210,39 @@
                     <Typography className="-mb-2" variant="h6">
                       Status
                     </Typography>
-                    <Input
-                      name="status"
+
+                    <Select
+                      name="status" 
                       value={formData.status}
-                      onChange={handleInputChange}
+                      onChange={(value) => handleSelectChange('status', value)}
                       label="Status"
-                      size="lg"
-                    />
+                      size="lg"  
+                    >
+                      <Option value="Occupied">Occupied
+
+                    </Option>
+                    <Option value="Vacant">Vacant
+
+                    </Option>
+
+                    </Select>
+
                     <Typography className="-mb-2" variant="h6">
-                      Tenant ID
+                      Tenant 
                     </Typography>
-                    <Input
+                    <Select
                       name="tenant"
                       value={formData.tenant}
-                      onChange={handleInputChange}
-                      label="Tenant ID"
+                      onChange={(value) => handleSelectChange('tenant', value)}
+                      label="Tenant"
                       size="lg"
-                    />
+                    >
+                  {tenants.map((tenant) => (
+                    <Option key={tenant._id} value={tenant._id}>
+                      {tenant.full_name}
+                    </Option>
+                  ))}
+                </Select>
                   </CardBody>
                   <CardFooter className="pt-0">
                     <Button variant="gradient" onClick={handleAddAppartement} fullWidth>
@@ -269,7 +311,7 @@
           </td>
           <td className="p-4 border-b border-blue-gray-50">
             <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">
-              {apartment.tenant || 'N/A'}
+              {apartment.tenant.full_name || 'N/A'}
             </p>
           </td>
           

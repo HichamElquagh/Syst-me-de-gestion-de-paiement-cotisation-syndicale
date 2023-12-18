@@ -19,7 +19,7 @@ const LoginForm = () => {
       const response = await axios.post('http://localhost:3001/api/login', {
         email,
         password,
-      });
+      },{ withCredentials: true });
 
         if (response.data.messageS != null) {
             toast.success(response.data.messageS , {

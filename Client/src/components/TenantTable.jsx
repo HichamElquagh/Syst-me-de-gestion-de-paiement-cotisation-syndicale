@@ -17,7 +17,7 @@ const TenantTable = () => {
 
   const fetchTenants = async () => {
     try {
-      const response = await axios.get('http://localhost:3001/syndic/getAllTenants');
+      const response = await axios.get('http://localhost:3001/syndic/getAllTenants',{withCredentials : true })
       setTenants(response.data);
     } catch (error) {
       console.error('Error fetching tenants:', error);
@@ -51,6 +51,7 @@ const TenantTable = () => {
        autoClose: 4000,
      });
     } 
+    fetchTenants()
 
    };
 

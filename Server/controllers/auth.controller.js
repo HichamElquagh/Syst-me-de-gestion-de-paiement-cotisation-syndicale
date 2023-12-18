@@ -88,13 +88,16 @@ const login = async (req, res) => {
     );
     console.log(comparePassword);
     if (comparePassword) {
-      const accessToken = generateAccessToken({ user: loginEmail });
+      const accessToken = generateAccessToken({ user: verifyexistEmail });
 
       res.cookie("access_token", accessToken, {
         httpOnly: true, // The cookie cannot be accessed via client-side JavaScript
-        secure: process.env.NODE_ENV === "production", // Ensures the cookie is only sent over HTTPS in production
-        // sameSite: 'Strict', // Protects against CSRF attacks
+        secure: process.env.NODE_ENV === "production", // Ensures the cookie is only sent over HTTPS in production     
       });
+      console.log("dddd");
+      console.log(req.cookies.access_token);
+      console.log("dddd");
+
 
       return res.status(200).json({
         messageS: "Vous avez crée un compte avec success",
@@ -224,6 +227,8 @@ const resetPasswordAfterVerif = async (req, res) => {
   }
 };
 const logout = async (req, res) => {
+
+  
   const islogout = res.clearCookie("access_token");
   if (islogout) {
     return res.status(200).json({

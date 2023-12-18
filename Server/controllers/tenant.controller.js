@@ -2,12 +2,14 @@ const Tenant = require('../models/tenant.model');
 
 
 const addTenant = async (req, res) => {
+  const user = req.user._id
   try {
     const { full_name, cin, phone } = req.body;
     const newTenant = new Tenant({
       full_name,
       cin,
       phone,
+      user,
     });
     console.log(newTenant);
 
@@ -28,8 +30,11 @@ const addTenant = async (req, res) => {
 
 // READ - Obtenir la liste de tous les locataires
 const getAllTenants = async (req, res) => {
+  const user_id = req.user._id
   try {
-    const tenants = await Tenant.find();
+    const tenants = await Tenant.find({
+      user : user_id
+    });
     return res.status(200).json(tenants);
   } catch (error) {
     console.error('Erreur lors de la récupération de tous les locataires :', error);

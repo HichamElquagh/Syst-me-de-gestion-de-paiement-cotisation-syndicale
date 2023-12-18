@@ -1,8 +1,9 @@
 const Appartement = require('../models/appartement.model');
 const PaiementModel = require('../models/payment.model');
 
-// Create
 const createAppartement = async (req, res) => {
+  const user = req.user._id
+
   try {
     const { floor_number, door_number, status, tenant } = req.body;
     const newAppartement = new Appartement({
@@ -10,11 +11,14 @@ const createAppartement = async (req, res) => {
       door_number,
       status,
       tenant,
+      user,
     });
+
+    console.log(newAppartement);
 
     const savedAppartement = await newAppartement.save();
 
-    if (savedAppartement) {
+    if (savedAppartement.status !== 'Vacant' ) {
       await PaiementModel.create({
         appartement: savedAppartement._id,
       });
@@ -27,16 +31,18 @@ const createAppartement = async (req, res) => {
       return res.json({ message: "Failed to save appartement" });
     }
   } catch (error) {
-    console.error('Error creating appartement:', error);
     return res.status(500).json({ error: error.message });
   }
 };
 
 
-// Read all
 const getAllAppartements = async (req, res) => {
+  const user_id = req.user._id
   try {
-    const appartements = await Appartement.find();
+    const appartements = await Appartement.find({
+      user : user_id
+    }).populate('tenant', ['full_name' , 'phone']);
+    console.log(appartements);
     return res.status(200).json(appartements);
   } catch (error) {
     console.error('Error getting all appartements:', error);
@@ -44,7 +50,7 @@ const getAllAppartements = async (req, res) => {
   }
 };
 
-// Read by ID
+
 const getAppartementById = async (req, res) => {
   const { appartementId } = req.params;
   try {
@@ -59,7 +65,6 @@ const getAppartementById = async (req, res) => {
   }
 };
 
-// Update
 const updateAppartement = async (req, res) => {
   const { appartementId } = req.params;
   const updates = req.body;
@@ -74,6 +79,12 @@ const updateAppartement = async (req, res) => {
     if (!updatedAppartement) {
       return res.json({ messageE: 'Appartement not found' });
     }
+    if(updatedAppartement.status === "Occupied"){
+
+      await PaiementModel.create({
+        appartement: updatedAppartement._id,
+      });
+    }
 
     return res.json({
       messageS : "Appartement updated succussfuly" 
@@ -84,7 +95,7 @@ const updateAppartement = async (req, res) => {
   }
 };
 
-// Delete
+
 const deleteAppartement = async (req, res) => {
   const { appartementId } = req.params;
   try {

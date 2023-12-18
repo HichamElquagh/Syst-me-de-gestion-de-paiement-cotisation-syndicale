@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const {authMiddleware} = require('../middlewares/auth.middlewares')
 
 
 
@@ -16,8 +17,8 @@ const {
 }=require('../controllers/syndic.controller') 
 
 
-router.post('/addAppartement',createAppartement);
-router.get('/appartements' , getAllAppartements)
+router.post('/addAppartement',authMiddleware,createAppartement);
+router.get('/appartements' , authMiddleware , getAllAppartements)
 router.get('/getAppartement/:appartementId', getAppartementById);
 router.put('/updateAppartement/:appartementId', updateAppartement);
 router.delete('/removeAppartement/:appartementId', deleteAppartement);
@@ -28,11 +29,14 @@ router.delete('/removeAppartement/:appartementId', deleteAppartement);
 // for paiment  
 
 const {
-    getAllPayments
+    getAllPayments,
+    addPaiement,
 
 }= require('../controllers/payment.controller')
 
-router.get('/addTenant', getAllPayments)
+router.get('/AllPayments',authMiddleware ,  getAllPayments)
+router.put('/AddPayment' , addPaiement)
+
 
 // for paiment  
 
@@ -48,8 +52,8 @@ const {
 } = require('../controllers/tenant.controller')
 
 
-router.get('/getAllTenants', getAllTenants)
-router.post('/addTenant', addTenant)
+router.get('/getAllTenants', authMiddleware ,  getAllTenants)
+router.post('/addTenant',authMiddleware ,  addTenant)
 router.get('/getTenantById/:tenantId', getTenantById)
 router.put('/updateTenant/:tenantId', updateTenant)
 router.delete('/deleteTenant/:tenantId', deleteTenant)

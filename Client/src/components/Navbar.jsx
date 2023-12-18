@@ -2,13 +2,21 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserInfo } from '../slices/authSlice';
 import { clearCredentials } from '../slices/authSlice';
+import axios from "axios";
+
 
 const Navbar = () => {
   const dispatch = useDispatch();
   const userData = useSelector(getUserInfo);
 
-  const handleLogout = () => {
-    dispatch(clearCredentials());
+  const handleLogout = async () => {
+    const response = await axios.post(
+      'http://localhost:3001/api/logout',
+      {},
+      { withCredentials: true }
+    );    if (response) {
+      dispatch(clearCredentials());
+    }
   };
 
   return (

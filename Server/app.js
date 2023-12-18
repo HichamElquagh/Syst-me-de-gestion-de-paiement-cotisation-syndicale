@@ -12,7 +12,7 @@ const cors = require('cors')
 
 
 
-app.use(cookieParser());
+app.use(cookieParser( process.env.ACCESS_TOKEN_SECRET));
 
 const connectDatabase = require('./config/db'); // Correct function name
 
@@ -24,8 +24,10 @@ connectDatabase(); // Call the correct function here
 
 const PORT = 3001;
 app.use(cors({
+  credentials: true,
   origin:"http://localhost:5173"
 }))
+
 app.use('/api', usersRouter);
 app.use('/syndic',syndicRoute)
 // app.use('/api/user', clientRouter )

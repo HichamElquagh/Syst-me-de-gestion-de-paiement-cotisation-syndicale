@@ -41,18 +41,22 @@ const validateRegistrationData = [
   ]
 
   const authMiddleware = async(req,res,next)=>{
+    // console.log(req);
     //get data from cookie
-    const token = req.cookies.access_token;
+    const access_token = req.cookies.access_token;
+    // const { }
     console.log('hello');
-    console.log(token);
+    console.log(access_token);
+    console.log('hello');
 
-    if (!token) {
+
+    if (!access_token) {
         return res.status(401).json({ message: 'vous etes pas connecter ' });
     }else{
-      const checktoken =verifToken(token)
-
+      const checktoken =verifToken(access_token)
       if(checktoken){
-         next();
+        req.user = checktoken
+      next();
       }else{
         return res.json({
           message : "token expired"
@@ -65,27 +69,51 @@ const validateRegistrationData = [
     }
 
   }
-  const isAuth = async(req,res,next)=>{
-    const token = req.cookies.access_token;
+  // const isAuth = async(req,res,next)=>{
+  //   const token = req.cookies.access_token;
 
-    if (!token) {
-      next()  
-      }else{
-      const checktoken =verifToken(token)
-
-      if(checktoken){
-        return res.json({
-          message: "vous aver deja fais login  "
-        })
-      }
+  //   if (!token) {
+  //     next()  
+  //     }else{
+  //     const checktoken =verifToken(token)
+       
+  //     if(checktoken){
+  //       return res.json({
+  //         message: "vous aver deja fais login  "
+  //       })
+  //     }
 
 
       
 
-    }
+  //   }
 
 
-  }
+  // }
+
+  // middleware/validateToken.js
+
+// const validateToken = (req, res, next) => {
+//   // Récupérez le token à partir du cookie
+//   const token = req.cookies.access_token;
+// console.log(token);
+//   if (!token) {
+//     return res.status(401).json({ message: 'Unauthorized' });
+//   }
+
+//   try {
+//     // Vérifiez et décryptez le token
+//     const decoded = verifToken(token, 'votre_secret_key');  
+//     console.log(decoded);  
+//     next();
+//   } catch (error) {
+//     console.error('Erreur lors de la validation du token :', error);
+//     return res.status(401).json({ message: error.message });
+//   }
+// };
+
+// module.exports = validateToken;
+
 
 
 
@@ -95,6 +123,5 @@ module.exports = {
     validateRegistrationData,
     validateloginData,
     authMiddleware,
-    isAuth
 
 }

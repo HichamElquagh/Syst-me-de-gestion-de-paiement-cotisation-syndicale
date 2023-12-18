@@ -67,7 +67,8 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
             cin: formData.cin,
             phone: formData.phone,
         }
-      );
+        ,{ withCredentials: true }
+        );
 
       if (response) {
         toast.success(response.data.messageS, {

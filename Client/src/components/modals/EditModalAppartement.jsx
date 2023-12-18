@@ -9,9 +9,12 @@ import {
   CardFooter,
   Typography,
   Input,
+  Select,
+  Option
 } from "@material-tailwind/react";
 
 const EditModalAppartement = ({ id, isEditModalOpen, handleAddModalToggle }) => {
+  const [tenants , setTenants] = useState([])
 
   const [formData, setFormData] = useState({
     floor_number: "",
@@ -38,8 +41,19 @@ const EditModalAppartement = ({ id, isEditModalOpen, handleAddModalToggle }) => 
     };
 
     fetchData();
+    fetchTenants()
   }, [id]);
-
+    
+  const fetchTenants = async () => {
+    try {
+      const response = await axios.get('http://localhost:3001/syndic/getAllTenants', { withCredentials: true }
+      );
+      console.log(response);
+      setTenants(response.data);
+    } catch (error) {
+      console.error('Error fetching tenants:', error);
+    }
+  };
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -48,6 +62,13 @@ const EditModalAppartement = ({ id, isEditModalOpen, handleAddModalToggle }) => 
     }));
   };
 
+  const handleSelectChange = (name, value) => {
+    console.log(formData);
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
   const handleEditAppartement = async () => {
     try {
       const response = await axios.put(
@@ -108,31 +129,47 @@ const EditModalAppartement = ({ id, isEditModalOpen, handleAddModalToggle }) => 
           </Typography>
           <Input
             name="door_number"
-            value={formData.door_number}
+            value={formData.door_number }
             onChange={handleInputChange}
             label="Door Number"
             size="lg"
           />
           <Typography className="-mb-2" variant="h6">
-            Status
+                Status
           </Typography>
-          <Input
-            name="status"
-            value={formData.status}
-            onChange={handleInputChange}
-            label="Status"
-            size="lg"
-          />
-          <Typography className="-mb-2" variant="h6">
-            Tenant ID
-          </Typography>
-          <Input
-            name="tenant"
-            value={formData.tenant}
-            onChange={handleInputChange}
-            label="Tenant ID"
-            size="lg"
-          />
+
+          <Select
+                name="status" 
+                value={formData.status}
+                onChange={(value) => handleSelectChange('status', value)}
+                label="Status"
+                size="lg"  
+              >
+                <Option value="Occupied">Occupied
+
+              </Option>
+              <Option value="Vacant">Vacant
+
+              </Option>
+
+            </Select>
+
+            <Typography className="-mb-2" variant="h6">
+                Tenant 
+            </Typography>
+            <Select
+                name="tenant"
+                value={formData.tenant}
+                onChange={(value) => handleSelectChange('tenant', value)}
+                label="Tenant"
+                size="lg"
+              >
+            {tenants.map((tenant) => (
+              <Option key={tenant._id} value={tenant._id}>
+                {tenant.full_name}
+              </Option>
+            ))}
+                </Select>
         </CardBody>
         <CardFooter className="pt-0">
           <Button

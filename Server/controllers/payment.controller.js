@@ -1,22 +1,36 @@
 const PaiementModel = require('../models/payment.model');
-const AppartementModel = require('../models/appartement.model')
+const AppartementModel = require('../models/appartement.model');
+const { body } = require('express-validator');
 
 // Create: Ajouter un paiement
 const addPaiement = async (req, res) => {
+
   try {
-    const { amount, status, appartement, month, year } = req.body;
-    const newPayment = new PaiementModel({
-      amount,
-      status,
-      appartement,
-      month,
-      year,
-    });
-    const savedPayment = await newPayment.save();
-    res.status(201).json(savedPayment);
+    console.log(req.body);
+    const { amount, paiement_id, month, year } = req.body;
+    const status = "Paid";
+
+    // const newPayment = new PaiementModel({
+    //   amount,
+    //   appartement,
+    //   month,
+    //   year,
+    // });
+    const savedPayment = await PaiementModel.findOneAndUpdate(
+      { _id: paiement_id }, 
+      { amount, status, month, year },
+      { new: true } 
+    );
+    
+    if (savedPayment) {
+      res.json({messageS : 'Paiement success'});
+    }else{
+      res.json({messageE : 'Faild Paiement'});
+
+    }
   } catch (error) {
     console.error('Erreur lors de l\'ajout du paiement :', error);
-    res.status(500).json({ error: 'Erreur lors de l\'ajout du paiement' });
+    res.status(500).json({ error: error.message});
   }
 };
 
@@ -35,9 +49,18 @@ const addPaiement = async (req, res) => {
 
 // Read: Récupérer tous les paiements
 const getAllPayments = async (req, res) => {
+  const userId = req.user._id;
   try {
-    const payments = await PaiementModel.find().populate('appartement', ['floor_number', 'door_number' ,'tenant' ]);
-
+    const payments = await PaiementModel.find({}).populate({
+      path: 'appartement',
+      match: { user: userId }, 
+      select: ['floor_number', 'door_number', 'tenant'],
+      populate: {
+        path: 'tenant',
+        select: ['full_name', 'phone'],
+      },
+    });
+ 
     // Separate payments based on their status
     const paidPayments = payments.filter(payment => payment.status === 'Paid');
     const pendingPayments = payments.filter(payment => payment.status === 'Pending');

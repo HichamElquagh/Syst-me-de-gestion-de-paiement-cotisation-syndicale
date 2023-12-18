@@ -21,10 +21,10 @@ function App() {
       <Routes>
         {/* Use a ProtectedRoute component for routes that require authentication */}
         <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
-        <Route path="/appartement" element={<AppartementTable />}/>
-        <Route path="/paiement" element={<PaiementTable />}/>
-        <Route path="/client" element={<TenantTable />} />
-        <Route path="/login" element={<ProtectedRoute><LoginPage /></ProtectedRoute>} />
+        <Route path="/appartement" element={<ProtectedRoute><AppartementTable /></ProtectedRoute>}/>
+        <Route path="/paiement" element={<ProtectedRoute><PaiementTable /></ProtectedRoute>}/>
+        <Route path="/client" element={<ProtectedRoute><TenantTable /></ProtectedRoute>} />
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterForm />} />
 
         {/* Add more routes as needed */}

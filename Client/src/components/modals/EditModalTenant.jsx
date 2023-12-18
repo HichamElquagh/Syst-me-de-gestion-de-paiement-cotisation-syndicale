@@ -20,24 +20,24 @@ const EditModalTenant = ({ id, isEditModal, handleEditModalClose }) => {
   });
 
   useEffect(() => {
-    // Fetch data for the specified apartment ID (id) and set the form data
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `http://localhost:3001/syndic/getTenantById/${id}`
-        );
-        console.log(response);
-
-        if (response) {
-          setFormData(response.data); // Assuming the API response has the apartment data
-        }
-      } catch (error) {
-        console.error("Error fetching apartment data:", error);
+      if (id !== null) {
+        fetchData();
       }
-    };
-
-    fetchData();
   }, [id]);
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:3001/syndic/getTenantById/${id}`
+      );
+      console.log(response);
+
+      if (response) {
+        setFormData(response.data); // Assuming the API response has the apartment data
+      }
+    } catch (error) {
+      console.error("Error fetching apartment data:", error);
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
