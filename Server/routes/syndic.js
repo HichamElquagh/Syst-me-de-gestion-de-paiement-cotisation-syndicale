@@ -1,9 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const {authMiddleware} = require('../middlewares/auth.middlewares')
-
-
-
+const {validateAppartementData } = require('../middlewares/appartement.middlewares')
 // for Appartement  
 
 const {
@@ -17,7 +15,7 @@ const {
 }=require('../controllers/syndic.controller') 
 
 
-router.post('/addAppartement',authMiddleware,createAppartement);
+router.post('/addAppartement',authMiddleware,validateAppartementData,createAppartement);
 router.get('/appartements' , authMiddleware , getAllAppartements)
 router.get('/getAppartement/:appartementId', getAppartementById);
 router.put('/updateAppartement/:appartementId', updateAppartement);

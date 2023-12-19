@@ -1,6 +1,12 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import jsPDF from "jspdf";
+import { format } from 'date-fns';
+import { fr } from 'date-fns/locale';
+import logo from '../assets/logo.png'
+
+
 import {
   Button,
   Dialog,
@@ -12,10 +18,10 @@ import {
 } from "@material-tailwind/react";
 
 const PaiementTable = () => {
+  const [errors, setErrors] = useState({});
+
   const [formData, setFormData] = useState({
     amount: "",
-   month: "",
-    year: "",
   });
   const [paiementId , setPaiementId] = useState("")
   const [paidPaiements, setPaidPaiements] = useState([]);
@@ -48,17 +54,32 @@ const PaiementTable = () => {
       ...prevData,
       [name] : value,
     })))
-      console.log(formData);
+      // console.log(formData);
+
+
+  }
+
+  const validateForm =()=>{
+    const newErrors = {}
+    if(!formData.amount.trim()){
+      newErrors.amount = "amount is required"
+    }
+
+  setErrors(newErrors)
+
+  return Object.keys(newErrors).length === 0;
 
 
   }
   const handleAddPaiement = async ()=>{
+
+    if (!validateForm()) {
+      return ;
+    }
        
       const response = await axios.put('http://localhost:3001/syndic/AddPayment',{
       amount : formData.amount,
-      paiement_id : paiementId,
-      month : formData.month,
-      year : formData.year
+      paiement_id : paiementId
     },{
       withCredentials : true
     })
@@ -69,7 +90,6 @@ const PaiementTable = () => {
           autoClose: 4000,
         });
 
-        // Do something with the updated apartment data
 
       } else {
         toast.error(response.data.messageE, {
@@ -96,6 +116,149 @@ const PaiementTable = () => {
 
 
   }
+
+  const handlePrint = (e) => {
+
+    const objectData = {
+      tenant: e.appartement.tenant.full_name,
+      appartementDoor: e.appartement.door_number,
+      appartementFloor: e.appartement.floor_number,
+      montant: e.amount+ " DH",
+      Status: e.status,
+      DatePaiemnt:format(new Date(e.date), 'dd MMMM yyyy', { locale: fr }),
+    };
+
+
+  
+    const pdf = new jsPDF();  
+    // // Logo
+    const logoWidth = 40;
+    const logoHeight = 40;
+    
+    pdf.addImage(logo, 'PNG', 150, 10, logoWidth, logoHeight);
+    // Header
+    pdf.setFontSize(18);
+    pdf.setFont('helvetica', 'bold');
+    pdf.setTextColor(0, 102, 204); // Bleu foncé
+    pdf.text('Payment Receipt', 20, 30);
+  
+    // Subheader
+    pdf.setFontSize(14);
+    pdf.setTextColor(0, 0, 0); // Noir
+    pdf.text('Details', 20, 50);
+  
+    // Content
+    pdf.setFontSize(12);
+    pdf.setFont('helvetica', 'normal');
+  
+    const startY = 60;
+    const lineHeight = 10;
+  
+    Object.entries(objectData).forEach(([key, value], index) => {
+      pdf.text(`${key}:`, 20, startY + index * lineHeight);
+      pdf.text(`${value}`, 70, startY + index * lineHeight);
+    });
+  
+    // Separator line
+    pdf.line(20, startY + Object.keys(objectData).length * lineHeight + 5, 190, startY + Object.keys(objectData).length * lineHeight + 5);
+  
+    // Payment Section
+    const paymentSectionY = startY + (Object.keys(objectData).length + 2) * lineHeight + 10;
+    pdf.text('Payment Section', 20, paymentSectionY);
+    pdf.line(20, paymentSectionY + 5, 190, paymentSectionY + 5);
+  
+    // Footer
+    pdf.setFont('helvetica', 'italic');
+    pdf.setFontSize(10);
+    pdf.text('Thank you for your payment!', 20, paymentSectionY + 15);
+  
+    // Status color
+    const statusColor = e.status === 'Paid' ? [0, 128, 0] : [255, 0, 0]; 
+    pdf.setFillColor(...statusColor);
+    pdf.rect(20, paymentSectionY + 20, 170, lineHeight, 'F');
+  
+    pdf.setTextColor(255, 255, 255); 
+    pdf.text(`Status: ${e.status}`, 20, paymentSectionY + 25);
+  
+    pdf.save(`${e.appartement.tenant.full_name}_Receipt.pdf`);
+  };
+
+  const handlePrintAllPaidTenants = (paidPayments) => {
+    const pdf = new jsPDF();
+    const logoWidth = 40;
+    const logoHeight = 40;
+    const logoMargin = 10; 
+  
+    pdf.addImage(logo, 'PNG', 150, 10, logoWidth, logoHeight);
+  
+    pdf.setFontSize(12); 
+    pdf.setFont('helvetica', 'bold');
+    pdf.text('All Paid Tenants Receipt', 20, 20);
+  
+    const startY = 30 + logoHeight + logoMargin; 
+    const columnWidths = [20, 30, 30, 30, 30, 20]; 
+    const columnOffsets = [0, 20, 20, 30, 20, 10]; 
+    const headers = ['Tenant   ', 'Door Num   ', 'Floor Num   ', 'Amount   ', 'Status', '         Date'];
+  
+  
+    pdf.setFillColor(200, 220, 255); 
+    pdf.rect(20, startY, pdf.internal.pageSize.width - 25, 20, 'F');
+    pdf.setTextColor(0, 0, 0); 
+    pdf.setFont('helvetica', 'bold');
+    headers.forEach((header, index) => {
+      pdf.text(header, 20 + columnWidths.slice(0, index).reduce((a, b) => a + b, 0) + columnOffsets[index], startY + 16);
+    });
+  
+    // Draw data rows
+    pdf.setFont('helvetica', 'normal');
+    pdf.setTextColor(0, 0, 0); // Data text color
+    paidPayments.forEach((payment, index) => {
+      const rowData = [
+        payment.appartement.tenant.full_name,
+        payment.appartement.door_number,
+        payment.appartement.floor_number,
+        payment.amount,
+        payment.status,
+        format(new Date(payment.date), 'dd MMMM yyyy', { locale: fr }),
+      ];
+  
+      // Draw data row background
+      const rowHeight = 20; // Adjust row height
+      pdf.setFillColor(index % 2 === 0 ? 245 : 255, 255, 255); // Alternate row colors
+      pdf.rect(20, startY + (index + 1) * rowHeight, pdf.internal.pageSize.width - 40, rowHeight, 'F');
+  
+      // Draw data row text
+      rowData.forEach((data, i) => {
+        pdf.text(String(data), 20 + columnOffsets[i] + columnWidths.slice(0, i).reduce((a, b) => a + b, 0), startY + (index + 1) * rowHeight + 16);
+      });
+  
+      // Separator line
+      pdf.setDrawColor(200, 200, 200); // Line color
+      pdf.line(20, startY + (index + 2) * rowHeight, pdf.internal.pageSize.width - 20, startY + (index + 2) * rowHeight);
+    });
+  
+    // Calculate the end position of the table
+    const endY = pdf.internal.pageSize.height - 20;
+  
+    // Add a margin to avoid overlapping with the footer
+    const marginBottom = 10;
+  
+    // If the table goes beyond the end position, add a new page
+    if (startY + (paidPayments.length + 2) * 20 + marginBottom > endY) {
+      pdf.addPage();
+    }
+  
+    pdf.save('All_Paid_Tenants_Receipt.pdf');
+  };
+  
+  
+  
+  
+    
+  
+
+
+  
 
   const renderPaymentRows = (payments) => {
     return payments.map((payment) => (
@@ -131,7 +294,7 @@ const PaiementTable = () => {
                   </div> 
                 </td>
         <td className="p-4 border-b border-blue-gray-50">
-          <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">${payment.amount}</p>
+          <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{payment.amount} DH</p>
         </td>
         {payment.status !== 'Paid' && (
           <>
@@ -154,11 +317,31 @@ const PaiementTable = () => {
               </div>
             </td>
             <td className="p-4 border-b border-blue-gray-50">
-              <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{payment.month}</p>
+              <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">    {format(new Date(payment.date), 'dd MMMM yyyy', { locale: fr })}</p>
             </td>
-            <td className="p-4 border-b border-blue-gray-50">
-              <p className="block antialiased font-sans text-sm leading-normal text-blue-gray-900 font-normal">{payment.year}</p>
-            </td>
+
+            <td
+                className="p-4 border-b border-blue-gray-50"
+                onClick={() => handlePrint(payment)} // Replace handlePrint with your actual print function
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="1.5"
+                  stroke="currentColor"
+                  data-slot="icon"
+                  className="w-6 h-6 transition-transform duration-300 transform"
+
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M7.5 7.5h-.75A2.25 2.25 0 0 0 4.5 9.75v7.5a2.25 2.25 0 0 0 2.25 2.25h7.5a2.25 2.25 0 0 0 2.25-2.25v-7.5a2.25 2.25 0 0 0-2.25-2.25h-.75m-6 3.75 3 3m0 0 3-3m-3 3V1.5m6 9h.75a2.25 2.25 0 0 1 2.25 2.25v7.5a2.25 2.25 0 0 1-2.25 2.25h-7.5a2.25 2.25 0 0 1-2.25-2.25v-.75"
+                  />
+                </svg>
+              </td>
+
           </>
         )}
       </tr>
@@ -209,6 +392,15 @@ const PaiementTable = () => {
         <div className="p-6 overflow-scroll w-full mx-auto max-w-7xl">
           <div className="mb-6 flex justify-between items-center">
             <h1 className="text-2xl font-bold text-blue-gray-900">Paid Paiement</h1>
+            <div className="flex justify-between">
+            <p className="me-4 text-xl font-bold text-blue-gray-900 ">  Download All</p>
+            <button onClick={()=>handlePrintAllPaidTenants(paidPaiements)}>
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="green" data-slot="icon" class="w-6 h-6">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75v-9A2.25 2.25 0 0 0 18.75 7H17M8 10l4 4 4-4M12 5v8"></path>
+              </svg>
+            </button>
+            </div>
+
           </div>
           <table className="w-full table-auto text-left">
             <thead>
@@ -230,10 +422,11 @@ const PaiementTable = () => {
                   <p className="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Status</p>
                 </th>             
                 <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                  <p className="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Month</p>
+                  <p className="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Date Paiment</p>
                 </th>
+
                 <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
-                  <p className="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Years</p>
+                  <p className="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Print</p>
                 </th>
               </tr>
             </thead>
@@ -258,34 +451,17 @@ className="bg-transparent shadow-none"
     <Typography className="-mb-2" variant="h6">
       Amount
     </Typography>
+    {errors.amount && <p className="text-red-500 text-sm ">{errors.amount}</p>}
     <Input
       name="amount"
       value={formData.amount}
       onChange={handleInputChange}
       label="Amount DH "
       size="lg"
-    />
-    <Typography className="-mb-2" variant="h6">
-      month
-    </Typography>
-    <Input
-      name="month"
-      value={formData.month}
-      onChange={handleInputChange}
-      label="Month"
-      size="lg"
-    />
-    <Typography className="-mb-2" variant="h6">
-      Years
-    </Typography>
-    <Input
-      name="year"
-      value={formData.year}
-      onChange={handleInputChange}
-      label="Years"
-      size="lg"
-    />
+      error={errors.amount} 
+      />
   </CardBody>
+
   <CardFooter className="pt-0">
     <Button  className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"  
     onClick={handleAddPaiement} 

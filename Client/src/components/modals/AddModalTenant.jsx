@@ -115,7 +115,7 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
       <Card className="mx-auto w-full max-w-[24rem]">
         <CardBody className="flex flex-col gap-4">
           <Typography variant="h4" color="blue-gray">
-            Edit Appartment
+            Add Appartment
           </Typography>
           <Typography className="-mb-2" variant="h6">
             Full Name

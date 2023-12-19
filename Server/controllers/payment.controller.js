@@ -6,10 +6,12 @@ const { body } = require('express-validator');
 const addPaiement = async (req, res) => {
 
   try {
-    console.log(req.body);
-    const { amount, paiement_id, month, year } = req.body;
-    const status = "Paid";
 
+
+    console.log(req.body);
+    const { amount, paiement_id } = req.body;
+    const status = "Paid";
+    const date = new Date(); 
     // const newPayment = new PaiementModel({
     //   amount,
     //   appartement,
@@ -18,7 +20,7 @@ const addPaiement = async (req, res) => {
     // });
     const savedPayment = await PaiementModel.findOneAndUpdate(
       { _id: paiement_id }, 
-      { amount, status, month, year },
+      { amount, status, date },
       { new: true } 
     );
     

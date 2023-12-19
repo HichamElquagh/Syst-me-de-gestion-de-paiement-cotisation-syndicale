@@ -17,6 +17,7 @@
       } from "@material-tailwind/react";
 
     const AppartementTable = () => {
+      const [errors , setErrors] = useState({})
       const [tenants , setTenants] = useState([])
       const [isEditModalOpen, setEditModalOpen] = useState(false);
       const [editAppartmentId, setEditAppartmentId] = useState(null);
@@ -43,7 +44,7 @@
             );
             if (response) {
               
-              setApartments(response.data); // Assuming the API response is an array of apartments
+              setApartments(response.data); 
             }
           } catch (error) {
             console.error("Error fetching apartments:", error);
@@ -92,7 +93,28 @@
           }));
         };
 
+
+        const validateForm= ()=>{
+          const newErrors = {}
+
+          if(!formData.door_number.trim()){
+            newErrors.door_number = "door number is required"
+          }
+          if(!formData.floor_number.trim()){
+            newErrors.floor_number = "Floor number is required"
+          }
+          if(!formData.status.trim()){
+            newErrors.status = "Status is required"
+          }
+          if(!formData.tenant.trim()){
+            newErrors.tenant = "Tenant is required"
+          }
+          setErrors(newErrors)
+        }
       const handleAddAppartement =  async () => {
+        if(!validateForm()){
+            return;
+        }
         try {
 
             const response = await axios.post('http://localhost:3001/syndic/addAppartement', {
@@ -105,18 +127,13 @@
         );
         console.log(response);
 
-        if (response) {
-          toast.success(response.data.message, {
+        if (response.data.messageS) {
+          toast.success(response.data.messageS, {
             autoClose: 4000,
           });
-
-          setApartments((prevApartments) => [
-            ...prevApartments,
-            response.data.newAppartment, // Assuming the API response includes the newly added apartment
-          ]);
           
         } else {
-          toast.error(response.error, {
+          toast.error(response.data.messageE, {
             autoClose: 4000,
           });
         }
@@ -196,7 +213,10 @@
                       onChange={handleInputChange}
                       label="Floor Number"
                       size="lg"
+                      error ={errors.floor_number}
                     />
+                    {errors.floor_number && <p className="text-red-500 text-sm ">{errors.floor_number}</p>}
+
                     <Typography className="-mb-2" variant="h6">
                       Door Number
                     </Typography>
@@ -206,7 +226,10 @@
                       onChange={handleInputChange}
                       label="Door Number"
                       size="lg"
+                      error = {errors.door_number}
                     />
+                    {errors.door_number && <p className="text-red-500 text-sm ">{errors.door_number}</p>}
+
                     <Typography className="-mb-2" variant="h6">
                       Status
                     </Typography>
@@ -217,6 +240,7 @@
                       onChange={(value) => handleSelectChange('status', value)}
                       label="Status"
                       size="lg"  
+                      error={errors.status}
                     >
                       <Option value="Occupied">Occupied
 
@@ -226,6 +250,8 @@
                     </Option>
 
                     </Select>
+                    {errors.status && <p className="text-red-500 text-sm ">{errors.status}</p>}
+
 
                     <Typography className="-mb-2" variant="h6">
                       Tenant 
@@ -236,6 +262,7 @@
                       onChange={(value) => handleSelectChange('tenant', value)}
                       label="Tenant"
                       size="lg"
+                      error={errors.status}
                     >
                   {tenants.map((tenant) => (
                     <Option key={tenant._id} value={tenant._id}>
@@ -243,6 +270,8 @@
                     </Option>
                   ))}
                 </Select>
+                {errors.tenant && <p className="text-red-500 text-sm ">{errors.tenant}</p>}
+
                   </CardBody>
                   <CardFooter className="pt-0">
                     <Button variant="gradient" onClick={handleAddAppartement} fullWidth>

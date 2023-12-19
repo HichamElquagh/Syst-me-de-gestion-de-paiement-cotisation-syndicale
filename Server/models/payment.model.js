@@ -20,12 +20,7 @@ const Payment = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Appartement', 
   },
-  month: {
-    type: String, 
-  },
-  year: {
-    type: Number,
-  },
+
 });
 
 module.exports = mongoose.model('Payment', Payment);

@@ -24,11 +24,11 @@ const createAppartement = async (req, res) => {
       });
 
       return res.json({
-        message: "Appartement created with success",
+        messageS: "Appartement created with success",
         data: savedAppartement,
       });
     } else {
-      return res.json({ message: "Failed to save appartement" });
+      return res.json({ messageE: "Failed to save appartement" });
     }
   } catch (error) {
     return res.status(500).json({ error: error.message });

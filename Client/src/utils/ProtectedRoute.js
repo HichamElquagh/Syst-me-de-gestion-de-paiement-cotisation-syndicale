@@ -7,11 +7,10 @@ import { useNavigate } from 'react-router-dom';
 
 const ProtectedRoute = ({ children }) => {
   const user = useSelector(getUserInfo);
-  const navigate = useNavigate(); // useNavigate hook from react-router-dom
+  const navigate = useNavigate(); 
 
 useEffect(()=>{
   if (user === null) {
-    // Redirect to the login page if the user is not authenticated
     return navigate('/login')
   }else{
     return navigate('/')
