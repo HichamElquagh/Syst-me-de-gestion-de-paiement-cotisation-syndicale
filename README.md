@@ -51,7 +51,7 @@ npm install
 ```
 
 ### Configuration
-- Dupliquez le fichier .env.example dans le dossier backend et renommez-le en .env. Configurez les variables d'environnement nécessaires,
+- Dupliquez le fichier .env.example dans le dossier backend 'Server' et renommez-le en .env. Configurez les variables d'environnement nécessaires,
  telles que les clés secrètes pour JWT et les informations de connexion à la base de données MongoDB.
 
 ## Utilisation
@@ -72,7 +72,7 @@ npm test
 ### Déploiement
 ```bash
 cd Syst-me-de-gestion-de-paiement-cotisation-syndicale
-docker-compose up -d
+docker-compose up 
 ```
 
 
