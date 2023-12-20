@@ -96,6 +96,8 @@
 
         const validateForm= ()=>{
           const newErrors = {}
+          // console.log("formData.status:", formData.tenant);
+
 
           if(!formData.door_number.trim()){
             newErrors.door_number = "door number is required"
@@ -110,13 +112,13 @@
             newErrors.tenant = "Tenant is required"
           }
           setErrors(newErrors)
+          return Object.keys(newErrors).length === 0
         }
       const handleAddAppartement =  async () => {
         if(!validateForm()){
-            return;
+          return;
         }
         try {
-
             const response = await axios.post('http://localhost:3001/syndic/addAppartement', {
                 floor_number: formData.floor_number,
                 door_number: formData.door_number,
@@ -143,7 +145,7 @@
 
             
         } catch (error) {
-            
+            console.log(error.message);
         }
 
         // Reset the form and close the modal if needed
@@ -309,7 +311,7 @@
               <tbody>
     {apartments.map((apartment, index) => {
       if (!apartment || typeof apartment !== 'object') {
-        return null; // Skip rendering if apartment is undefined or not an object
+        return null; 
       }
 
       return (

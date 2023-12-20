@@ -1,4 +1,4 @@
-const { login } = require('../../backend/controllers/auth.controller');
+const { login } = require('../../Server/controllers/auth.controller');
 const userModel = require('../models/users');
 const bcrypt = require('bcrypt');
 const generateAccessToken = require('../services/jwtToken');

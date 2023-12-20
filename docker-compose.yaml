@@ -1,0 +1,21 @@
+version: '3'
+services:
+  frontend:
+    build: 
+      context : ./Client
+      dockerfile : ./Dockerfile
+    image: clientsyndicimage
+    command: npm run dev 
+    ports:
+      - "5173:5173"
+
+  backend:
+    build:
+      context: ./Server
+      dockerfile : ./Dockerfile
+    image: serversyndicimage
+    command: npm run dev 
+    ports:
+      - "3001:3001"
+    
+

@@ -2,7 +2,6 @@ const PaiementModel = require('../models/payment.model');
 const AppartementModel = require('../models/appartement.model');
 const { body } = require('express-validator');
 
-// Create: Ajouter un paiement
 const addPaiement = async (req, res) => {
 
   try {
@@ -52,18 +51,30 @@ const addPaiement = async (req, res) => {
 // Read: Récupérer tous les paiements
 const getAllPayments = async (req, res) => {
   const userId = req.user._id;
+  console.log(userId);
   try {
-    const payments = await PaiementModel.find({}).populate({
+    const userAppartements = await AppartementModel.find({
+      user: userId
+    });
+
+    if (!userAppartements || userAppartements.length === 0) {
+      res.json({ messageE: "Aucun appartement associé à cet utilisateur." });
+      return;
+    }
+    const userAppartementIds = userAppartements.map(appartement => appartement._id);
+
+    const payments = await PaiementModel.find({
+      'appartement': { $in: userAppartementIds }
+    }).populate({
       path: 'appartement',
-      match: { user: userId }, 
       select: ['floor_number', 'door_number', 'tenant'],
       populate: {
         path: 'tenant',
         select: ['full_name', 'phone'],
       },
     });
- 
-    // Separate payments based on their status
+
+
     const paidPayments = payments.filter(payment => payment.status === 'Paid');
     const pendingPayments = payments.filter(payment => payment.status === 'Pending');
 
@@ -72,13 +83,12 @@ const getAllPayments = async (req, res) => {
       pendingPayments,
     });
   } catch (error) {
-    console.error('Erreur lors de la récupération des paiements :', error.message);
     res.status(500).json({ error: 'Erreur lors de la récupération des paiements' });
   }
 };
 
 
-// Read: Récupérer un paiement par ID
+
 const getPaymentById = async (req, res) => {
   try {
     const paiementId = req.params.id;
@@ -88,12 +98,10 @@ const getPaymentById = async (req, res) => {
     }
     res.status(200).json(payment);
   } catch (error) {
-    console.error('Erreur lors de la récupération du paiement par ID :', error);
     res.status(500).json({ error: 'Erreur lors de la récupération du paiement par ID' });
   }
 };
 
-// Update: Mettre à jour un paiement par ID
 const updatePaymentById = async (req, res) => {
   try {
     const paiementId = req.params.id;
@@ -101,19 +109,17 @@ const updatePaymentById = async (req, res) => {
     const updatedPayment = await PaiementModel.findByIdAndUpdate(
       paiementId,
       { amount, status, appartement, month, year },
-      { new: true } // Pour renvoyer le document mis à jour
+      { new: true } 
     );
     if (!updatedPayment) {
       return res.status(404).json({ error: 'Paiement non trouvé' });
     }
     res.status(200).json(updatedPayment);
   } catch (error) {
-    console.error('Erreur lors de la mise à jour du paiement par ID :', error);
     res.status(500).json({ error: 'Erreur lors de la mise à jour du paiement par ID' });
   }
 };
 
-// Delete: Supprimer un paiement par ID
 const deletePaymentById = async (req, res) => {
   try {
     const paiementId = req.params.id;
@@ -121,9 +127,8 @@ const deletePaymentById = async (req, res) => {
     if (!deletedPayment) {
       return res.status(404).json({ error: 'Paiement non trouvé' });
     }
-    res.status(204).end(); // Aucun contenu à renvoyer après la suppression
+    res.status(204).end(); 
   } catch (error) {
-    console.error('Erreur lors de la suppression du paiement par ID :', error);
     res.status(500).json({ error: 'Erreur lors de la suppression du paiement par ID' });
   }
 };

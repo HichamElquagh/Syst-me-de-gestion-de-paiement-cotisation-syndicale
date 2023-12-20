@@ -261,6 +261,15 @@ const PaiementTable = () => {
   
 
   const renderPaymentRows = (payments) => {
+    if (!payments || payments.length === 0) {
+      return (
+        <div>
+          <p>No payment available</p>
+        </div>
+      );
+    }else{
+
+  
     return payments.map((payment) => (
       <tr key={payment._id}>
         <td className="p-4 border-b border-blue-gray-50">
@@ -346,6 +355,8 @@ const PaiementTable = () => {
         )}
       </tr>
     ));
+  }
+
   };
   
 

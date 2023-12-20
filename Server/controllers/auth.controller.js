@@ -33,6 +33,8 @@ const register = async (req, res) => {
       email: req.body.email,
       // role: role._id, // Attribuer l'ID du rôle
       password: hashedPassword,
+      isverified : true
+
     });
 
     // Enregistrer l'utilisateur dans la base de données

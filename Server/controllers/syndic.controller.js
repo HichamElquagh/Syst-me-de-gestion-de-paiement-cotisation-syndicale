@@ -14,7 +14,6 @@ const createAppartement = async (req, res) => {
       user,
     });
 
-    console.log(newAppartement);
 
     const savedAppartement = await newAppartement.save();
 
@@ -42,10 +41,8 @@ const getAllAppartements = async (req, res) => {
     const appartements = await Appartement.find({
       user : user_id
     }).populate('tenant', ['full_name' , 'phone']);
-    console.log(appartements);
     return res.status(200).json(appartements);
   } catch (error) {
-    console.error('Error getting all appartements:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -60,7 +57,6 @@ const getAppartementById = async (req, res) => {
     }
     return res.status(200).json(appartement);
   } catch (error) {
-    console.error('Error getting appartement by ID:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -90,7 +86,6 @@ const updateAppartement = async (req, res) => {
       messageS : "Appartement updated succussfuly" 
     });
   } catch (error) {
-    console.error('Error updating appartement:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };
@@ -110,7 +105,6 @@ const deleteAppartement = async (req, res) => {
       messageS:"Appartement deleted successfuly",
     })
   } catch (error) {
-    console.error('Error deleting appartement:', error);
     return res.status(500).json({ error: 'Internal Server Error' });
   }
 };

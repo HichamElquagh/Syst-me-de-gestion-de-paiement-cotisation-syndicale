@@ -28,7 +28,6 @@ const addTenant = async (req, res) => {
   }
 };
 
-// READ - Obtenir la liste de tous les locataires
 const getAllTenants = async (req, res) => {
   const user_id = req.user._id
   try {
@@ -42,7 +41,6 @@ const getAllTenants = async (req, res) => {
   }
 };
 
-// READ - Obtenir un locataire par ID
 const getTenantById = async (req, res) => {
   const { tenantId } = req.params;
   try {
@@ -57,7 +55,6 @@ const getTenantById = async (req, res) => {
   }
 };
 
-// UPDATE - Mettre à jour un locataire par ID
 const updateTenant = async (req, res) => {
   const { tenantId } = req.params;
   const updates = req.body;
@@ -82,7 +79,6 @@ const updateTenant = async (req, res) => {
   }
 };
 
-// DELETE - Supprimer un locataire par ID
 const deleteTenant = async (req, res) => {
   const { tenantId } = req.params;
   try {
