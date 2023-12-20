@@ -71,6 +71,7 @@ npm test
 ```
 ### Déploiement
 ```bash
+cd Syst-me-de-gestion-de-paiement-cotisation-syndicale
 docker-compose up -d
 ```
 
