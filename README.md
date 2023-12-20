@@ -38,34 +38,41 @@ Bienvenue dans le projet de gestion de paiement de cotisation syndicale. Ce syst
 ```bash
 git clone https://github.com/HichamElquagh/Syst-me-de-gestion-de-paiement-cotisation-syndicale.git
 cd Syst-me-de-gestion-de-paiement-cotisation-syndicale ```
-
-Installez les dépendances du backend:
+```
+### Installez les dépendances du backend:
+```bash
 cd Server
 npm install
-
-Installez les dépendances du frontend:
+```
+### Installez les dépendances du frontend:
+```bash
 cd Server
 npm install
+```
 
-Configuration
+### Configuration
 - Dupliquez le fichier .env.example dans le dossier backend et renommez-le en .env. Configurez les variables d'environnement nécessaires,
  telles que les clés secrètes pour JWT et les informations de connexion à la base de données MongoDB.
 
-Utilisation
-
-front :
-cd Server
-npm run dev 
-back:
+## Utilisation
+#### front :
+```bash
 cd Server
 npm run dev
-Tests
+```
+#### back:
+```bash
+cd Server
+npm run dev
+```
+### Tests
+```bash
 npm test
-
-Déploiement
-
+```
+### Déploiement
+```bash
 docker-compose up -d
-
+```
 
 
 
