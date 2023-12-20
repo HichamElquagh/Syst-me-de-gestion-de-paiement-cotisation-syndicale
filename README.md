@@ -21,7 +21,7 @@ Bienvenue dans le projet de gestion de paiement de cotisation syndicale. Ce syst
 - **Frontend:** React.js
 - **Gestion d'État:** Redux / Context API
 - **Authentification:** JSON Web Token (JWT)
-- **Tests Unitaires:** Framework de test de votre choix (par exemple, Jest)
+- **Tests Unitaires:** Framework de test : (Jest)
 - **Conteneurisation:** Docker
 
 ## Structure du Projet
