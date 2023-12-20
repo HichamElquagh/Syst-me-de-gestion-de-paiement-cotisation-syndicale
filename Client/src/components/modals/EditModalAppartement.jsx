@@ -24,7 +24,6 @@ const EditModalAppartement = ({ id, isEditModalOpen, handleAddModalToggle }) => 
   });
 
   useEffect(() => {
-    // Fetch data for the specified apartment ID (id) and set the form data
     const fetchData = async () => {
       try {
         const response = await axios.get(
@@ -33,7 +32,7 @@ const EditModalAppartement = ({ id, isEditModalOpen, handleAddModalToggle }) => 
         console.log(response);
 
         if (response) {
-          setFormData(response.data); // Assuming the API response has the apartment data
+          setFormData(response.data); 
         }
       } catch (error) {
         console.error("Error fetching apartment data:", error);
@@ -86,7 +85,6 @@ const EditModalAppartement = ({ id, isEditModalOpen, handleAddModalToggle }) => 
           autoClose: 4000,
         });
 
-        // Do something with the updated apartment data
 
       } else {
         toast.error(response.data.messageE, {
@@ -94,7 +92,7 @@ const EditModalAppartement = ({ id, isEditModalOpen, handleAddModalToggle }) => 
         });
       }
 
-      handleAddModalToggle(); // Close the modal after editing
+      handleAddModalToggle(); 
 
     } catch (error) {
       console.error("Error updating apartment:", error);

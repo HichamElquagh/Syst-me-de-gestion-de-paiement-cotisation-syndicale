@@ -92,7 +92,6 @@ const deleteTenant = async (req, res) => {
       messageS: "Tenant Deleted succussfully",
     });
   } catch (error) {
-    // console.error('Erreur lors de la suppression du locataire :', error.message);
     return res.status(500).json({ error: error.message });
   }
 };

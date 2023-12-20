@@ -75,7 +75,6 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
           autoClose: 4000,
         });
 
-        // Do something with the updated apartment data
 
       } else {
         toast.error(response.data.messageE, {
@@ -126,7 +125,7 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
             onChange={handleInputChange}
             label="Full Name"
             size="lg"
-            error={errors.full_name} // Ajoutez cette ligne
+            error={errors.full_name} 
           />
             {errors.full_name && <p className="text-red-500 text-sm ">{errors.full_name}</p>}
 
@@ -140,7 +139,7 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
             onChange={handleInputChange}
             label="CIN"
             size="lg"
-            error={errors.cin} // Ajoutez cette ligne
+            error={errors.cin} 
 
           />
             {errors.cin && <p className="text-red-500 text-sm ">{errors.cin}</p>}
@@ -155,7 +154,7 @@ const AddModalTenant = ({isOpenModal, handleAddModalToggle}) => {
             onChange={handleInputChange}
             label="Phone"
             size="lg"
-            error={errors.phone} // Ajoutez cette ligne
+            error={errors.phone} 
 
           />
           {errors.phone && <p className="text-red-500 text-sm ">{errors.phone}</p>}

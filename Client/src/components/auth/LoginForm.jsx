@@ -40,10 +40,9 @@ const LoginForm = () => {
             });
         }      
     } catch (error) {
-      // Gérez les erreurs ici
-      console.error('Erreur lors de la connexion', error);
-      toast.error('Erreur lors de la connexion', {
-        autoClose: 3000, // Durée en millisecondes (3 secondes dans cet exemple)
+      console.error('Erreur dans  la connexion', error);
+      toast.error('Erreur dans  la connexion', {
+        autoClose: 3000, 
       });
     }
   };

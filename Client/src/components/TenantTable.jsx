@@ -83,7 +83,7 @@ const TenantTable = () => {
               <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
                 <p className="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Phone</p>
               </th>
-              {/* Add other columns as needed */}
+
               <th className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
                 <p className="block antialiased font-sans text-sm text-blue-gray-900 font-normal leading-none opacity-70">Edit</p>
               </th>
@@ -117,7 +117,6 @@ const TenantTable = () => {
                   {tenant.phone}
                   </p>
                 </td>
-                {/* Add other cells as needed */}
                 <td className="p-4 border-b border-blue-gray-50">
                   <Button
                     className="bg-blue-500 hover:bg-blue-700"

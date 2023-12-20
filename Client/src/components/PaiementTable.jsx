@@ -331,7 +331,7 @@ const PaiementTable = () => {
 
             <td
                 className="p-4 border-b border-blue-gray-50"
-                onClick={() => handlePrint(payment)} // Replace handlePrint with your actual print function
+                onClick={() => handlePrint(payment)} 
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

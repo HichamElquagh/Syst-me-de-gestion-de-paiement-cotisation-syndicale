@@ -64,7 +64,6 @@
     
       const handleAddModalToggle = () => {
         setAddModalOpen((prev) => !prev);
-        // Reset form data when the modal is closed
         if (!isAddModalOpen) {
           setFormData({
             floor_number: "",
@@ -96,7 +95,6 @@
 
         const validateForm= ()=>{
           const newErrors = {}
-          // console.log("formData.status:", formData.tenant);
 
 
           if(!formData.door_number.trim()){
@@ -148,7 +146,6 @@
             console.log(error.message);
         }
 
-        // Reset the form and close the modal if needed
       };
 
 

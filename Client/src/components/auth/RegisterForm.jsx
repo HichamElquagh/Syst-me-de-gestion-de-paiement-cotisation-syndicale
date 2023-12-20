@@ -52,7 +52,6 @@ const RegisterForm = () => {
     e.preventDefault();
 
     if (!validateForm()) {
-      // Stop registration if there are validation errors
       return;
     }
 
@@ -91,7 +90,6 @@ const RegisterForm = () => {
           <div className="md:w-1/2 px-5">
             <h2 className="text-2xl font-bold text-[#002D74]">Register</h2>
             <form className="mt-6" onSubmit={handleRegister}>
-              {/* First Name */}
               <div className="mt-4">
                 <label className="block text-gray-700">First Name</label>
                 <input
@@ -105,7 +103,6 @@ const RegisterForm = () => {
                 {errors.firstName && <p className="text-red-500 text-sm mt-1">{errors.firstName}</p>}
               </div>
 
-              {/* Last Name */}
               <div className="mt-4">
                 <label className="block text-gray-700">Last Name</label>
                 <input
@@ -119,7 +116,6 @@ const RegisterForm = () => {
                 {errors.lastName && <p className="text-red-500 text-sm mt-1">{errors.lastName}</p>}
               </div>
 
-              {/* Email */}
               <div className="mt-4">
                 <label className="block text-gray-700">Email Address</label>
                 <input
@@ -133,7 +129,7 @@ const RegisterForm = () => {
                 {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
               </div>
 
-              {/* Password */}
+
               <div className="mt-4">
                 <label className="block text-gray-700">Password</label>
                 <input
@@ -148,7 +144,7 @@ const RegisterForm = () => {
                 {errors.password && <p className="text-red-500 text-sm mt-1">{errors.password}</p>}
               </div>
 
-              {/* Confirm Password */}
+
               <div className="mt-4">
                 <label className="block text-gray-700">Confirm Password</label>
                 <input
@@ -184,7 +180,7 @@ const RegisterForm = () => {
               </Link>
             </div>
           </div>
-          {/* Image */}
+
           <div className="w-1/2 md:block hidden">
             <img
               src="https://img.freepik.com/free-photo/modern-business-center_1127-3157.jpg?size=626&ext=jpg&ga=GA1.1.92304765.1695715663&semt=ais"

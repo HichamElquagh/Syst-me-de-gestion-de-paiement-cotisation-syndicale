@@ -14,12 +14,9 @@ import TenantTable from './components/TenantTable';
 function App() {
   return (
     <>
-      {/* Fixed Navbar */}
       <Navbar />
 
-      {/* Route content */}
       <Routes>
-        {/* Use a ProtectedRoute component for routes that require authentication */}
         <Route path="/" element={<ProtectedRoute><HomePage /></ProtectedRoute>} />
         <Route path="/appartement" element={<ProtectedRoute><AppartementTable /></ProtectedRoute>}/>
         <Route path="/paiement" element={<ProtectedRoute><PaiementTable /></ProtectedRoute>}/>
@@ -27,7 +24,6 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterForm />} />
 
-        {/* Add more routes as needed */}
       </Routes>
 
     </>

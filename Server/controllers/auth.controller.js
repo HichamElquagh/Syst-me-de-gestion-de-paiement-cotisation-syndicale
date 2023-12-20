@@ -26,24 +26,21 @@ const register = async (req, res) => {
     console.log("for password register", req.body.password.length);
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
 
-    // Créer un nouvel utilisateur
     const newUser = new userModel({
       first_name: req.body.first_name,
       last_name: req.body.last_name,
       email: req.body.email,
-      // role: role._id, // Attribuer l'ID du rôle
+      // role: role._id,
       password: hashedPassword,
       isverified : true
 
     });
 
-    // Enregistrer l'utilisateur dans la base de données
     await newUser.save();
     const accessToken = generateAccessToken({ user: req.body.email });
     console.log("pour register " + accessToken);
     // const refreshToken = generateRefreshToken ({user: req.body.email})
 
-    // Répondre avec le nouvel utilisateur
 
     const link = `http://localhost:3000/verifemail?token=${accessToken}`;
     const email = req.body.email;
@@ -93,7 +90,7 @@ const login = async (req, res) => {
       const accessToken = generateAccessToken({ user: verifyexistEmail });
 
       res.cookie("access_token", accessToken, {
-        httpOnly: true, // The cookie cannot be accessed via client-side JavaScript
+        httpOnly: true, 
         secure: process.env.NODE_ENV === "production", // Ensures the cookie is only sent over HTTPS in production     
       });
       console.log("dddd");

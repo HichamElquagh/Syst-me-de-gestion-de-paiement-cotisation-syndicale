@@ -32,7 +32,7 @@ const EditModalTenant = ({ id, isEditModal, handleEditModalClose }) => {
       console.log(response);
 
       if (response) {
-        setFormData(response.data); // Assuming the API response has the apartment data
+        setFormData(response.data); 
       }
     } catch (error) {
       console.error("Error fetching apartment data:", error);
@@ -63,7 +63,6 @@ const EditModalTenant = ({ id, isEditModal, handleEditModalClose }) => {
           autoClose: 4000,
         });
 
-        // Do something with the updated apartment data
 
       } else {
         toast.error(response.data.messageE, {
@@ -72,7 +71,6 @@ const EditModalTenant = ({ id, isEditModal, handleEditModalClose }) => {
       }
 
       handleEditModalClose();
-       // Close the modal after editing
 
     } catch (error) {
       console.error("Error updating apartment:", error);

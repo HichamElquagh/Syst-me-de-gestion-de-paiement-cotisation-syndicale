@@ -18,7 +18,6 @@ const {
   storeemail
 
 }=require('../controllers/auth.controller') 
-// Define your routes here
 
 // router.get('/logout',logout);
 

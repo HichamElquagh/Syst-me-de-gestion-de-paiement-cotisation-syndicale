@@ -48,7 +48,6 @@ const addPaiement = async (req, res) => {
 //     }
 //   };
 
-// Read: Récupérer tous les paiements
 const getAllPayments = async (req, res) => {
   const userId = req.user._id;
   console.log(userId);
